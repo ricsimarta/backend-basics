@@ -11,3 +11,7 @@ fetch('/data/kismacska')
 fetch('/data/120')
   .then(res => res.json())
   .then(data => console.log(data))
+
+fetch('/data/12')
+  .then(res => res.json())
+  .then(data => console.log(data))

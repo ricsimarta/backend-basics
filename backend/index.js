@@ -27,23 +27,26 @@ app.get('/data', (req, res) => {
 app.get('/data/:id', (req, res) => {
   console.log(req.params)
   const searchId = Number(req.params.id)
-  // itt
 
-  fs.readFile(`${__dirname}/data.json`, (err, data) => {
-    if (err) {
-      console.log("error at reading the file", err)
-      res.status(500).json("error at reading the file")
-    } else {
-      const jsonData = JSON.parse(data)
-      const result = jsonData.find(obj => obj.id === searchId)
-      
-      if (result === undefined) {
-        res.status(404).json(`no user found with id ${searchId}`)
+  if (isNaN(searchId)) {
+    res.status(400).json(`id must be number`)
+  } else {
+    fs.readFile(`${__dirname}/data.json`, (err, data) => {
+      if (err) {
+        console.log("error at reading the file", err)
+        res.status(500).json("error at reading the file")
       } else {
-        res.status(200).json(result)
+        const jsonData = JSON.parse(data)
+        const result = jsonData.find(obj => obj.id === searchId)
+
+        if (result === undefined) {
+          res.status(404).json(`no user found with id ${searchId}`)
+        } else {
+          res.status(200).json(result)
+        }
       }
-    }
-  })
+    })
+  }
 })
 
 app.listen(port, () => {
