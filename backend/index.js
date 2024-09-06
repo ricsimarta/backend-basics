@@ -27,9 +27,27 @@ app.get('/data', (req, res) => {
 })
 
 app.post('/data', (req, res) => {
-  console.log(req.body);
+  fs.readFile(`${__dirname}/data.json`, (err, data) => {
+    if (err) {
+      console.log("error at reading the file", err)
+      res.status(500).json("error at reading the file")
+    } else {
+      const jsonData = JSON.parse(data)
 
-  res.json("response");
+      /* here <*-- make sure that we dont add another instance of the same id */ 
+
+      jsonData.push(req.body)
+
+      fs.writeFile(`${__dirname}/data.json`, JSON.stringify(jsonData, null, 2), (err) => {
+        if (err) {
+          console.log("error at writing the file", err)
+          res.status(500).json("error at writing the file")
+        } else {
+          res.json(`successfully added user with id ${req.body.id}`);
+        }
+      })
+    }
+  })
 })
 
 app.get('/data/:id', (req, res) => {
