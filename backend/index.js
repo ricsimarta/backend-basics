@@ -34,18 +34,24 @@ app.post('/data', (req, res) => {
     } else {
       const jsonData = JSON.parse(data)
 
-      /* here <*-- make sure that we dont add another instance of the same id */ 
+      const result = jsonData.find(obj => obj.id === req.body.id)
 
-      jsonData.push(req.body)
-
-      fs.writeFile(`${__dirname}/data.json`, JSON.stringify(jsonData, null, 2), (err) => {
-        if (err) {
-          console.log("error at writing the file", err)
-          res.status(500).json("error at writing the file")
-        } else {
-          res.json(`successfully added user with id ${req.body.id}`);
-        }
-      })
+      if (result !== undefined) {
+        res.status(403).json(`user id ${req.body.id} already exists`)
+      } else {
+        jsonData.push(req.body)
+        jsonData.sort((a, b) => a.id - b.id)
+        //HOMEWORK: ID SHOULD BE MADE IN THE BACKEND
+  
+        fs.writeFile(`${__dirname}/data.json`, JSON.stringify(jsonData, null, 2), (err) => {
+          if (err) {
+            console.log("error at writing the file", err)
+            res.status(500).json("error at writing the file")
+          } else {
+            res.json(`successfully added user with id ${req.body.id}`);
+          }
+        })
+      }
     }
   })
 })
