@@ -12,6 +12,16 @@ fetch('/data/120')
   .then(res => res.json())
   .then(data => console.log(data))
 
-fetch('/data/12')
+fetch('/data', {
+  method: "POST",
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    "id": 999,
+    "name": "New User",
+    "age": 99
+  })
+})
   .then(res => res.json())
   .then(data => console.log(data))

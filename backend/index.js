@@ -5,6 +5,8 @@ const fs = require('fs')
 const app = express()
 const port = 3000
 
+app.use(express.json())
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '/../frontend/index.html'))
 })
@@ -24,8 +26,13 @@ app.get('/data', (req, res) => {
   })
 })
 
+app.post('/data', (req, res) => {
+  console.log(req.body);
+
+  res.json("response");
+})
+
 app.get('/data/:id', (req, res) => {
-  console.log(req.params)
   const searchId = Number(req.params.id)
 
   if (isNaN(searchId)) {
